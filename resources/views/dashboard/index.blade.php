@@ -124,7 +124,7 @@
             <!-- Footer -->
             <footer class="bg-light-green py-4 mt-8 shadow-md">
                 <div class="container mx-auto flex justify-center space-x-4">
-                <button class="bg-dark-green text-white px-6 py-2 rounded-lg">Manual Penyiraman</button>
+                <a href="{{ route('ai.index') }}" class="bg-dark-green text-white px-6 py-2 rounded-lg">Cek Kondisi Tanaman</a>
                 <a href="{{ route('schedule.index') }}" class="bg-gray-500 text-white px-6 py-2 rounded-lg">Pengaturan Jadwal</a>
                 <button class="bg-gray-500 text-white px-6 py-2 rounded-lg">Notifikasi</button>
                 </div>
