@@ -13,7 +13,9 @@ export default {
         extend: {
             colors:{
                 'light-green': "#F0FDEF",
+                'light-green2': "#E4FFE2",
                 'dark-green': "#5B9859",
+                'dark-green2': "#3C7C3A",
                 'light-yellow': "#FFF6E4",
                 'dark-yellow': "#F8A900",
             }
