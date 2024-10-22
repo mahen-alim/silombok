@@ -44,7 +44,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Suhu -->
                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <h2 class="text-lg font-semibold text-green-900">Suhu</h2>
+                    <h2 class="text-lg font-semibold text-dark-green">Suhu</h2>
                     <div class="text-5xl font-bold text-blue-500 mt-4">80°C</div>
                     <div class="w-full bg-blue-100 rounded-full h-2.5 mt-2">
                     <div class="bg-blue-500 h-2.5 rounded-full w-2/3"></div>
@@ -53,7 +53,7 @@
 
                 <!-- Kelembaban Udara -->
                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <h2 class="text-lg font-semibold text-green-900">Kelembaban Udara</h2>
+                    <h2 class="text-lg font-semibold text-dark-green">Kelembaban Udara</h2>
                     <div class="text-5xl font-bold text-teal-500 mt-4">300%</div>
                     <div class="w-full bg-teal-100 rounded-full h-2.5 mt-2">
                     <div class="bg-teal-500 h-2.5 rounded-full w-full"></div>
@@ -62,7 +62,7 @@
 
                 <!-- Kelembaban Tanah -->
                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <h2 class="text-lg font-semibold text-green-900">Kelembaban Tanah</h2>
+                    <h2 class="text-lg font-semibold text-dark-green">Kelembaban Tanah</h2>
                     <div class="text-5xl font-bold text-orange-500 mt-4">100%</div>
                     <div class="w-full bg-orange-100 rounded-full h-2.5 mt-2">
                     <div class="bg-orange-500 h-2.5 rounded-full w-full"></div>
@@ -71,7 +71,7 @@
 
                 <!-- Status Penyiraman Terakhir -->
                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <h2 class="text-lg font-semibold text-green-900">Status Penyiraman Terakhir</h2>
+                    <h2 class="text-lg font-semibold text-dark-green">Status Penyiraman Terakhir</h2>
                     <div class="mt-4 flex items-center justify-center">
                     <span class="bg-dark-green text-white px-4 py-1 rounded-full text-sm">Selesai</span>
                     </div>
