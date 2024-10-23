@@ -13,13 +13,10 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('time');
-            $table->integer('duration');
-            $table->integer('frequency');
-            $table->string('mode');
-            $table->float('minimum_humidity');
-            $table->integer('interval');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->json('days'); // Menyimpan hari dalam format JSON
+            $table->time('time'); // Kolom waktu untuk jadwal
+            $table->integer('duration'); // Kolom durasi
             $table->timestamps();
         });
     }
