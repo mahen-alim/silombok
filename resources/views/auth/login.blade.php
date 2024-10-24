@@ -20,7 +20,7 @@
 <body>
     <div class="main-container flex w-full h-screen">
         <div class="login-container flex w-1/2 bg-light-green p-5 items-center justify-center">
-            <div class="login-card flex flex-col bg-white p-10 gap-5 rounded-lg h-max items-center"> 
+            <div class="login-card flex flex-col bg-white p-10 gap-5 rounded-lg h-max items-center shadow-md"> 
                 <img src="{{ asset('img/silombok.png') }}" alt="logo" class="mb-5 w-1/2 h-auto"> 
                 <form class="flex flex-col gap-3 w-full" action="{{ route('login.submit') }}" method="POST">
                     @csrf
