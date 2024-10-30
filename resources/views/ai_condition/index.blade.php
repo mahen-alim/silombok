@@ -72,19 +72,30 @@
         
             // Event listener ketika tombol "Ambil Foto Tanaman" ditekan
             captureBtn.addEventListener('click', () => {
-                // Menampilkan elemen kamera
-                cameraContainer.classList.remove('hidden');
-                cancelBtn.classList.remove('hidden'); // Tampilkan tombol Cancel
-                
-                // Mengakses kamera perangkat
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then((s) => {
-                        stream = s; // Simpan stream
-                        video.srcObject = stream;
-                    })
-                    .catch((err) => {
-                        console.error('Error accessing camera: ', err);
-                    });
+                if (!stream) {
+                    // Menampilkan elemen kamera
+                    cameraContainer.classList.remove('hidden');
+                    cancelBtn.classList.remove('hidden'); // Tampilkan tombol Cancel
+                    
+                    // Mengakses kamera perangkat
+                    navigator.mediaDevices.getUserMedia({ video: true })
+                        .then((s) => {
+                            stream = s; // Simpan stream
+                            video.srcObject = stream;
+                        })
+                        .catch((err) => {
+                            console.error('Error accessing camera: ', err);
+                        });
+                } else {
+                    // Jika stream sudah ada, ambil foto
+                    const context = canvas.getContext('2d');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    
+                    // Menampilkan card hasil foto
+                    photoCard.classList.remove('hidden');
+                }
             });
         
             // Event listener ketika tombol "Batal" ditekan
@@ -92,6 +103,7 @@
                 // Stop video stream
                 if (stream) {
                     stream.getTracks().forEach(track => track.stop());
+                    stream = null; // Reset stream setelah dihentikan
                 }
                 // Sembunyikan video dan foto card
                 video.srcObject = null;
@@ -99,18 +111,6 @@
                 photoCard.classList.add('hidden');
                 cancelBtn.classList.add('hidden'); // Sembunyikan tombol Cancel
             });
-        
-            // Event listener ketika tombol "Ambil Foto Tanaman" ditekan
-            captureBtn.addEventListener('click', () => {
-                const context = canvas.getContext('2d');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                
-                // Menampilkan card hasil foto
-                photoCard.classList.remove('hidden');
-            });
         </script>
-            
 </body>
 </html>
