@@ -18,6 +18,8 @@ export default {
                 'dark-green2': "#3C7C3A",
                 'light-yellow': "#FFF6E4",
                 'dark-yellow': "#F8A900",
+                'light-red': "#FFE8E8",
+                'dark-red': "#FF0000"
             }
         },
     },

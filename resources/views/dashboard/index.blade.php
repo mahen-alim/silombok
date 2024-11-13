@@ -113,20 +113,12 @@
                     </table>
                 </div>
                 </section>
-
-                <!-- Grafik Tren Historis -->
-                <section class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-lg font-semibold text-dark-green mb-4">Grafik Tren Historis</h2>
-                <div class="text-center text-gray-500">[Grafik Tren Suhu dan Kelembaban akan ditampilkan di sini]</div>
-                </section>
             </main>
-
+   
             <!-- Footer -->
-            <footer class="bg-light-green py-4 mt-8 shadow-md">
-                <div class="container mx-auto flex justify-center space-x-4">
-                <a href="{{ route('ai.index') }}" class="bg-dark-green text-white px-6 py-2 rounded-lg">Cek Kondisi Tanaman</a>
-                <a href="{{ route('schedule.index') }}" class="bg-gray-500 text-white px-6 py-2 rounded-lg">Pengaturan Jadwal</a>
-                <button class="bg-gray-500 text-white px-6 py-2 rounded-lg">Notifikasi</button>
+            <footer class="mt-3">
+                <div class="container mx-auto text-center">
+                    <span>&copy; 2024 Silombok. All rights reserved.</span>
                 </div>
             </footer>
         </div>

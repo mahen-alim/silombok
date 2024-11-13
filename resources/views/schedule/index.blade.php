@@ -41,7 +41,6 @@
                     <!-- Form for Adding/Editing Schedule -->
                     <form class="space-y-4" action="{{ route('schedule.store') }}" method="POST">
                         @csrf
-                        <!-- Pilih Hari -->
                         <div>
                             <label class="block text-sm font-medium text-green-900" for="days">Pilih Hari</label>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
@@ -123,7 +122,6 @@
                                                     @csrf
                                                     @method('delete')
                                                 </form>
-
                                                 <button class="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600" onclick="confirmDelete({{ $schedule->id }})">
                                                     Hapus
                                                 </button>
