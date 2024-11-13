@@ -43,18 +43,33 @@
         .type-con{
             animation: slide-left 1.1s ease-in forwards;        
         }
-
+        
         #prediction-card {
             position: relative;
             transition: box-shadow 0.3s ease-in-out;
         }
-
+        
         .shadow-top {
             position: relative;
             box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1); /* Shadow pada border top */
         }
+        
+        #camera, .button-container{
+            animation: slide-up 0.5s ease-in forwards;        
+        }
 
         /* Keyframes untuk animasi slide-down */
+        @keyframes slide-up {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @keyframes slide-down {
             0% {
                 opacity: 0;
@@ -91,9 +106,9 @@
     @vite('resources/css/app.css')
 </head>
 <body>
-    <div class="flex w-full h-max">
+    <div class="flex w-full">
         <!-- Sidebar -->
-        <div class="w-1/5">
+        <div class="w-1/5 h-screen">
             @include('layouts.sidebar')
         </div>
     
@@ -112,7 +127,7 @@
                 </div>
                 
                 <!-- Tombol untuk mengambil foto -->
-                <div class="flex gap-3 w-full">
+                <div class="button-container flex gap-3 w-full">
                     <button id="capture-btn" class="capture-container flex gap-3 justify-center w-full text-white bg-dark-green p-5 rounded-lg">
                         <h1>Ambil Foto Tanaman</h1>  
                     </button>
