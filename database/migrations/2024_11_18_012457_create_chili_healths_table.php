@@ -9,23 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('sensor_data', function (Blueprint $table) {
+        Schema::create('chili_healths', function (Blueprint $table) {
             $table->id();
-            $table->float('temperature');
-            $table->float('humidity');
-            $table->float('soil_moisture');
+            $table->string('chili_condition');
+            $table->string('nutritional_detection');
+            $table->string('physical_damage');
+            $table->string('chili_disease');
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('sensor_data');
+        Schema::dropIfExists('chili_healths');
     }
 };

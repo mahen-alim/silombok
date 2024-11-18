@@ -9,23 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('sensor_data', function (Blueprint $table) {
+        Schema::create('watering_histories', function (Blueprint $table) {
             $table->id();
-            $table->float('temperature');
-            $table->float('humidity');
-            $table->float('soil_moisture');
+            $table->string('plant_condition');
+            $table->time('duration');
+            $table->enum('status', ['finish', 'watering']);
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('sensor_data');
+        Schema::dropIfExists('watering_histories');
     }
 };
