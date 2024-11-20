@@ -135,7 +135,7 @@
             </div>
             
             <!-- Container untuk hasil capture, deskripsi, dan prediksi -->
-            <div id="result-container" class="w-full flex flex-col h-full hidden">
+            <div id="result-container" class="w-full flex-col h-full hidden">
                 <div class="w-full flex gap-5 h-max">
                     <!-- Hasil Capture -->
                     <img id="photo-result" class="w-1/3 rounded-lg" alt="Hasil Foto Tanaman">
