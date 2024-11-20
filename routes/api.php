@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChiliHealthController;
 use App\Http\Controllers\SensorDataController;
 use App\Models\SensorData;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ Route::post('/predict', function (Request $request) {
 
 Route::post('/sensor-data', [SensorDataController::class, 'store']);
 Route::get('/sensor-data', [SensorDataController::class, 'index']);
+Route::post('/save-data', [ChiliHealthController::class, 'store']);
 
 Route::post('/api/sensor-data', function (Request $request) {
     $request->validate([
