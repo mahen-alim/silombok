@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&family=Sora:wght@100..800&family=Varela+Round&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Dashboard</title>
     <style>
         *{
@@ -42,30 +43,30 @@
 
                 <!-- Grid for Measurements -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Suhu -->
+                 <!-- Suhu -->
                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
                     <h2 class="text-lg font-semibold text-dark-green">Suhu</h2>
-                    <div class="text-5xl font-bold text-blue-500 mt-4">80°C</div>
+                    <div class="text-5xl font-bold text-blue-500 mt-4"><span id="temperature"></span> °C</div>
                     <div class="w-full bg-blue-100 rounded-full h-2.5 mt-2">
-                    <div class="bg-blue-500 h-2.5 rounded-full w-2/3"></div>
+                        <div id="temperature-indicator" class="bg-blue-500 h-2.5 rounded-full"></div>
                     </div>
                 </div>
 
                 <!-- Kelembaban Udara -->
                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
                     <h2 class="text-lg font-semibold text-dark-green">Kelembaban Udara</h2>
-                    <div class="text-5xl font-bold text-teal-500 mt-4">300%</div>
+                    <div class="text-5xl font-bold text-teal-500 mt-4"><span id="humidity"></span> %</div>
                     <div class="w-full bg-teal-100 rounded-full h-2.5 mt-2">
-                    <div class="bg-teal-500 h-2.5 rounded-full w-full"></div>
+                        <div id="humidity-indicator" class="bg-teal-500 h-2.5 rounded-full"></div>
                     </div>
                 </div>
-
+            
                 <!-- Kelembaban Tanah -->
                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
                     <h2 class="text-lg font-semibold text-dark-green">Kelembaban Tanah</h2>
-                    <div class="text-5xl font-bold text-orange-500 mt-4">100%</div>
+                    <div class="text-5xl font-bold text-orange-500 mt-4"><span id="soil_moisture"></span></div>
                     <div class="w-full bg-orange-100 rounded-full h-2.5 mt-2">
-                    <div class="bg-orange-500 h-2.5 rounded-full w-full"></div>
+                        <div id="soil-moisture-indicator" class="bg-orange-500 h-2.5 rounded-full"></div>
                     </div>
                 </div>
 
@@ -134,5 +135,59 @@
             });
         </script>
     @endif
+
+        <!-- JavaScript untuk mengambil data sensor dan memperbarui indikator -->
+        <script>
+            $(document).ready(function() {
+                function fetchLatestSensorData() {
+                    $.ajax({
+                        url: '{{ url('/api/sensor-data') }}', // Ganti dengan endpoint API Anda
+                        method: 'GET',
+                        success: function(response) {
+                            if (response.data) {
+                                var temperature = response.data.temperature;
+                                var humidity = response.data.humidity;
+                                var soilMoisture = response.data.soil_moisture;
+    
+                                // Perbarui nilai sensor
+                                $('#temperature').text(temperature);
+                                $('#humidity').text(humidity);
+                                $('#soil_moisture').text(soilMoisture);
+    
+                                // Sesuaikan lebar indikator dengan nilai sensor
+                                $('#temperature-indicator').css('width', (temperature / 80) * 100 + '%'); // Suhu maksimal 80°C
+                                $('#humidity-indicator').css('width', humidity + '%'); // Kelembaban maksimal 100%
+                                $('#soil-moisture-indicator').css('width', (soilMoisture / 4095) * 100 + '%'); // Kelembaban tanah maksimal 4095
+    
+                                // Notifikasi jika nilai sensor melebihi batas maksimal
+                                if (temperature > 80 || humidity > 100 || soilMoisture > 4095) {
+                                    var message = 'Nilai sensor melebihi batas maksimal:\n';
+                                    if (temperature > 80) message += `- Suhu: ${temperature}°C\n`;
+                                    if (humidity > 100) message += `- Kelembaban Udara: ${humidity}%\n`;
+                                    if (soilMoisture > 4095) message += `- Kelembaban Tanah: ${soilMoisture}\n`;
+                                    
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Peringatan',
+                                        text: message,
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error fetching sensor data:', error);
+                        }
+                    });
+                }
+    
+                // Polling data setiap 5 detik
+                setInterval(fetchLatestSensorData, 5000);
+    
+                // Panggil fungsi untuk pertama kalinya saat halaman dimuat
+                fetchLatestSensorData();
+            });
+        </script>    
 </body>
 </html>
+

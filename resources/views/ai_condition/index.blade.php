@@ -175,113 +175,122 @@
         </div>
 
         <script>
-            const camera = document.getElementById('camera');
-            const captureBtn = document.getElementById('capture-btn');
-            const retryBtn = document.getElementById('retry-btn');
-            const predictionCard = document.getElementById('prediction-card');
-            const cameraContainer = document.getElementById('camera-container');
-            const resultContainer = document.getElementById('result-container');
-            const photoResult = document.getElementById('photo-result');
-            let videoStream;
-        
-            // Fungsi untuk memulai kamera
-            async function startCamera() {
-                try {
-                    videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
-                    camera.srcObject = videoStream;
-                    cameraContainer.classList.remove('hidden');  // Tampilkan kamera
-                    captureBtn.classList.remove('hidden');       // Tampilkan tombol capture
-                    resultContainer.classList.add('hidden');     // Sembunyikan hasil capture
-                    retryBtn.classList.add('hidden');            // Sembunyikan tombol ulangi
-                } catch (error) {
-                    console.error('Gagal mengakses kamera:', error);
-                }
-            }
-        
-            // Fungsi untuk menangkap foto dari video dan mengirimkannya ke API
-            captureBtn.addEventListener('click', async () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = camera.videoWidth;
-                canvas.height = camera.videoHeight;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
-        
-                // Menampilkan gambar hasil tangkapan
-                const imageDataUrl = canvas.toDataURL('image/jpeg');
-                photoResult.src = imageDataUrl;
-                resultContainer.classList.remove('hidden');   // Menampilkan hasil capture
-                cameraContainer.classList.add('hidden');      // Menyembunyikan kamera
-                captureBtn.classList.add('hidden');           // Sembunyikan tombol "Ambil Foto Tanaman"
-                retryBtn.classList.remove('hidden');          // Tampilkan tombol "Ulangi Foto"
-        
-                // Matikan kamera setelah foto diambil
-                if (videoStream) {
-                    videoStream.getTracks().forEach(track => track.stop());
-                }
-        
-                // Mengirim gambar ke API
-                canvas.toBlob(async (blob) => {
-                    const formData = new FormData();
-                    formData.append('image', blob, 'capture.jpg');
-                    
-                    // Pastikan URL yang benar
-                    const response = await fetch('http://127.0.0.1:5000/predict', { method: 'POST', body: formData });
-                    
-                    const result = await response.json();
-                    
-                    // Menampilkan prediksi dan rekomendasi dalam bentuk card di bawah hasil capture
-                    predictionCard.innerHTML = `
-                        <h2 class="text-xl font-bold text-dark-green">Kondisi Kesehatan Cabai</h2>
-                        <div class="flex gap-6 bg-white rounded-lg p-8 border border-gray-200 w-full animate-slide-down relative">
-                            <div class="condition-con flex flex-col w-max text-center items-center justify-center">
-                                <p class="text-gray-700">Kondisi Buah</p>
-                                <strong class="w-max mt-3 p-2 border-2 ${result.prediction === 'Busuk' ? 'border-dark-red text-dark-red bg-light-red' : 'border-green-500 text-green-500 bg-light-green'} rounded-lg">
-                                    ${result.prediction}
-                                </strong>
-                            </div>
-                            <div class="disease-con flex flex-col w-max text-center items-center justify-center -mt-2">
-                                <p class="text-gray-700 mb-5">Penyakit Cabai</p>
-                                <strong>Busuk Buah</strong>
-                            </div>
-                            <div class="nutrition-con flex flex-col w-max text-center items-center justify-center -mt-2">
-                                <p class="text-gray-700 mb-5">Kekurangan Nutrisi</p>
-                                <strong>-</strong>
-                            </div>
-                            <div class="pyshical-con flex flex-col w-max text-center items-center justify-center -mt-2">
-                                <p class="text-gray-700 mb-5">Kerusakan Fisik</p>
-                                <strong>Bercak Hitam</strong>
-                            </div>
-                        </div>
+            $(document).ready(function() {
+                const camera = document.getElementById('camera');
+                const captureBtn = document.getElementById('capture-btn');
+                const retryBtn = document.getElementById('retry-btn');
+                const predictionCard = document.getElementById('prediction-card');
+                const cameraContainer = document.getElementById('camera-container');
+                const resultContainer = document.getElementById('result-container');
+                const photoResult = document.getElementById('photo-result');
+                let videoStream;
 
-                        <h2 class="text-xl font-bold text-dark-green mt-5">Rekomendasi Perawatan</h2>
-                        <div class="bg-white shadow-lg rounded-lg p-5 border border-gray-200 w-full animate-slide-down">
-                            <ul class="mt-2 text-gray-700">
-                                <li><strong>Penyiraman:</strong> ${result.rekomendasi.penyiraman}</li>
-                                <li><strong>Perawatan:</strong> ${result.rekomendasi.perawatan}</li>
-                                <li><strong>Perkiraan Waktu Panen:</strong> ${result.rekomendasi.perkiraan_waktu_panen}</li>
-                                <li><strong>Kerusakan Fisik:</strong> ${result.rekomendasi.kerusakan_fisik}</li>
-                            </ul>
-                        </div>
-                    `;
-                }, 'image/jpeg');
-            });
-        
-            // Fungsi untuk mengulang proses foto
-            retryBtn.addEventListener('click', () => {
-                startCamera();  // Mulai kamera kembali
-            });
-        
-            // Memulai kamera saat halaman dimuat
-            window.addEventListener('load', startCamera);
-
-            // Menambahkan event listener untuk scroll
-            predictionCard.addEventListener('scroll', () => {
-                if (predictionCard.scrollTop > 0) {
-                    predictionCard.classList.add('shadow-top');  // Menambahkan shadow saat digulir
-                } else {
-                    predictionCard.classList.remove('shadow-top');  // Menghapus shadow saat di awal
+                // Fungsi untuk memulai kamera
+                async function startCamera() {
+                    try {
+                        videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        camera.srcObject = videoStream;
+                        cameraContainer.classList.remove('hidden');  // Tampilkan kamera
+                        captureBtn.classList.remove('hidden');       // Tampilkan tombol capture
+                        resultContainer.classList.add('hidden');     // Sembunyikan hasil capture
+                        retryBtn.classList.add('hidden');            // Sembunyikan tombol ulangi
+                    } catch (error) {
+                        console.error('Gagal mengakses kamera:', error);
+                    }
                 }
+
+                // Fungsi untuk menangkap foto dari video dan mengirimkannya ke API
+                captureBtn.addEventListener('click', async () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = camera.videoWidth;
+                    canvas.height = camera.videoHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
+
+                    // Menampilkan gambar hasil tangkapan
+                    const imageDataUrl = canvas.toDataURL('image/jpeg');
+                    photoResult.src = imageDataUrl;
+                    resultContainer.classList.remove('hidden');   // Menampilkan hasil capture
+                    cameraContainer.classList.add('hidden');      // Menyembunyikan kamera
+                    captureBtn.classList.add('hidden');           // Sembunyikan tombol "Ambil Foto Tanaman"
+                    retryBtn.classList.remove('hidden');          // Tampilkan tombol "Ulangi Foto"
+
+                    // Matikan kamera setelah foto diambil
+                    if (videoStream) {
+                        videoStream.getTracks().forEach(track => track.stop());
+                    }
+
+                    // Mengirim gambar ke API
+                    canvas.toBlob(async (blob) => {
+                        const formData = new FormData();
+                        formData.append('image', blob, 'capture.jpg');
+                        
+                        // Pastikan URL yang benar
+                        const response = await fetch('http://127.0.0.1:5000/predict', { method: 'POST', body: formData });
+                        
+                        const result = await response.json();
+                        
+                        // Menyimpan data gambar ke database
+                        const saveResponse = await fetch('http://127.0.0.1:8000/api/sensor-data', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        // Menampilkan prediksi dan rekomendasi dalam bentuk card di bawah hasil capture
+                        predictionCard.innerHTML = `
+                            <h2 class="text-xl font-bold text-dark-green">Kondisi Kesehatan Cabai</h2>
+                            <div class="flex gap-6 bg-white rounded-lg p-8 border border-gray-200 w-full animate-slide-down relative">
+                                <div class="condition-con flex flex-col w-max text-center items-center justify-center">
+                                    <p class="text-gray-700">Kondisi Buah</p>
+                                    <strong class="w-max mt-3 p-2 border-2 ${result.prediction === 'Busuk' ? 'border-dark-red text-dark-red bg-light-red' : 'border-green-500 text-green-500 bg-light-green'} rounded-lg">
+                                        ${result.prediction}
+                                    </strong>
+                                </div>
+                                <div class="disease-con flex flex-col w-max text-center items-center justify-center -mt-2">
+                                    <p class="text-gray-700 mb-5">Penyakit Cabai</p>
+                                    <strong>Busuk Buah</strong>
+                                </div>
+                                <div class="nutrition-con flex flex-col w-max text-center items-center justify-center -mt-2">
+                                    <p class="text-gray-700 mb-5">Kekurangan Nutrisi</p>
+                                    <strong>-</strong>
+                                </div>
+                                <div class="pyshical-con flex flex-col w-max text-center items-center justify-center -mt-2">
+                                    <p class="text-gray-700 mb-5">Kerusakan Fisik</p>
+                                    <strong>Bercak Hitam</strong>
+                                </div>
+                            </div>
+
+                            <h2 class="text-xl font-bold text-dark-green mt-5">Rekomendasi Perawatan</h2>
+                            <div class="bg-white shadow-lg rounded-lg p-5 border border-gray-200 w-full animate-slide-down">
+                                <ul class="mt-2 text-gray-700">
+                                    <li><strong>Penyiraman:</strong> ${result.rekomendasi.penyiraman}</li>
+                                    <li><strong>Perawatan:</strong> ${result.rekomendasi.perawatan}</li>
+                                    <li><strong>Perkiraan Waktu Panen:</strong> ${result.rekomendasi.perkiraan_waktu_panen}</li>
+                                    <li><strong>Kerusakan Fisik:</strong> ${result.rekomendasi.kerusakan_fisik}</li>
+                                </ul>
+                            </div>
+                        `;
+                    }, 'image/jpeg');
+                });
+
+                // Fungsi untuk mengulang proses foto
+                retryBtn.addEventListener('click', () => {
+                    startCamera();  // Mulai kamera kembali
+                });
+
+                // Memulai kamera saat halaman dimuat
+                window.addEventListener('load', startCamera);
+
+                // Menambahkan event listener untuk scroll
+                predictionCard.addEventListener('scroll', () => {
+                    if (predictionCard.scrollTop > 0) {
+                        predictionCard.classList.add('shadow-top');  // Menambahkan shadow saat digulir
+                    } else {
+                        predictionCard.classList.remove('shadow-top');  // Menghapus shadow saat di awal
+                    }
+                });
             });
+
         </script>
 
         {{-- <script>

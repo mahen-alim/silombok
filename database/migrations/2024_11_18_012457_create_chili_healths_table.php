@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('chili_healths', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sensor_data_id')->constrained('sensor_data')->onDelete('cascade');
             $table->string('chili_condition');
             $table->string('nutritional_detection');
             $table->string('physical_damage');

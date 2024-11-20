@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SensorData;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -11,7 +12,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard.index');
+        $sensorData = SensorData::latest()->get();
+        return view('dashboard.index', compact('sensorData'));
     }
 
     /**

@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('sensor_data', function (Blueprint $table) {
             $table->id();
-            $table->float('temperature');
-            $table->float('humidity');
-            $table->float('soil_moisture');
+            $table->float('temperature')->nullable();
+            $table->float('humidity')->nullable();
+            $table->float('soil_moisture')->nullable();
+            $table->binary('esp_cam')->nullable();
             $table->timestamps();
         });
     }
