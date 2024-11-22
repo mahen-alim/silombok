@@ -22,6 +22,7 @@ Route::post('/predict', function (Request $request) {
 });
 
 Route::post('/sensor-data', [SensorDataController::class, 'store']);
+Route::post('/save-data-upload', [SensorDataController::class, 'upload']);
 Route::get('/sensor-data', [SensorDataController::class, 'index']);
 Route::post('/save-data', [ChiliHealthController::class, 'store']);
 

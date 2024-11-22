@@ -16,7 +16,7 @@ return new class extends Migration
             $table->float('temperature')->nullable();
             $table->float('humidity')->nullable();
             $table->float('soil_moisture')->nullable();
-            $table->binary('esp_cam')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

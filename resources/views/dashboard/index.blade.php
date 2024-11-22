@@ -136,58 +136,58 @@
         </script>
     @endif
 
-        <!-- JavaScript untuk mengambil data sensor dan memperbarui indikator -->
-        <script>
-            $(document).ready(function() {
-                function fetchLatestSensorData() {
-                    $.ajax({
-                        url: '{{ url('/api/sensor-data') }}', // Ganti dengan endpoint API Anda
-                        method: 'GET',
-                        success: function(response) {
-                            if (response.data) {
-                                var temperature = response.data.temperature;
-                                var humidity = response.data.humidity;
-                                var soilMoisture = response.data.soil_moisture;
-    
-                                // Perbarui nilai sensor
-                                $('#temperature').text(temperature);
-                                $('#humidity').text(humidity);
-                                $('#soil_moisture').text(soilMoisture);
-    
-                                // Sesuaikan lebar indikator dengan nilai sensor
-                                $('#temperature-indicator').css('width', (temperature / 80) * 100 + '%'); // Suhu maksimal 80°C
-                                $('#humidity-indicator').css('width', humidity + '%'); // Kelembaban maksimal 100%
-                                $('#soil-moisture-indicator').css('width', (soilMoisture / 4095) * 100 + '%'); // Kelembaban tanah maksimal 4095
-    
-                                // Notifikasi jika nilai sensor melebihi batas maksimal
-                                if (temperature > 80 || humidity > 100 || soilMoisture > 4095) {
-                                    var message = 'Nilai sensor melebihi batas maksimal:\n';
-                                    if (temperature > 80) message += `- Suhu: ${temperature}°C\n`;
-                                    if (humidity > 100) message += `- Kelembaban Udara: ${humidity}%\n`;
-                                    if (soilMoisture > 4095) message += `- Kelembaban Tanah: ${soilMoisture}\n`;
-                                    
-                                    Swal.fire({
-                                        icon: 'warning',
-                                        title: 'Peringatan',
-                                        text: message,
-                                        confirmButtonText: 'OK'
-                                    });
-                                }
+    <!-- JavaScript untuk mengambil data sensor dan memperbarui indikator -->
+    <script>
+        $(document).ready(function() {
+            function fetchLatestSensorData() {
+                $.ajax({
+                    url: '{{ url('/api/sensor-data') }}', // Ganti dengan endpoint API Anda
+                    method: 'GET',
+                    success: function(response) {
+                        if (response.data) {
+                            var temperature = response.data.temperature;
+                            var humidity = response.data.humidity;
+                            var soilMoisture = response.data.soil_moisture;
+
+                            // Perbarui nilai sensor
+                            $('#temperature').text(temperature);
+                            $('#humidity').text(humidity);
+                            $('#soil_moisture').text(soilMoisture);
+
+                            // Sesuaikan lebar indikator dengan nilai sensor
+                            $('#temperature-indicator').css('width', (temperature / 80) * 100 + '%'); // Suhu maksimal 80°C
+                            $('#humidity-indicator').css('width', humidity + '%'); // Kelembaban maksimal 100%
+                            $('#soil-moisture-indicator').css('width', (soilMoisture / 4095) * 100 + '%'); // Kelembaban tanah maksimal 4095
+
+                            // Notifikasi jika nilai sensor melebihi batas maksimal
+                            if (temperature > 80 || humidity > 100 || soilMoisture > 4095) {
+                                var message = 'Nilai sensor melebihi batas maksimal:\n';
+                                if (temperature > 80) message += `- Suhu: ${temperature}°C\n`;
+                                if (humidity > 100) message += `- Kelembaban Udara: ${humidity}%\n`;
+                                if (soilMoisture > 4095) message += `- Kelembaban Tanah: ${soilMoisture}\n`;
+                                
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Peringatan',
+                                    text: message,
+                                    confirmButtonText: 'OK'
+                                });
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error fetching sensor data:', error);
                         }
-                    });
-                }
-    
-                // Polling data setiap 5 detik
-                setInterval(fetchLatestSensorData, 5000);
-    
-                // Panggil fungsi untuk pertama kalinya saat halaman dimuat
-                fetchLatestSensorData();
-            });
-        </script>    
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching sensor data:', error);
+                    }
+                });
+            }
+
+            // Polling data setiap 5 detik
+            setInterval(fetchLatestSensorData, 5000);
+
+            // Panggil fungsi untuk pertama kalinya saat halaman dimuat
+            fetchLatestSensorData();
+        });
+    </script>    
 </body>
 </html>
 

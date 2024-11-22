@@ -124,22 +124,22 @@
         <main class="main-container w-full p-5 gap-3 justify-center flex flex-col">
             <!-- Container Kamera -->
             <div id="camera-container" class="w-full flex justify-center p-5 border-2 border-gray-200 rounded-lg mb-5">
-                <video id="camera" class="w-full max-w-md rounded-lg shadow-lg" autoplay></video>
+                <img src="http://192.168.156.236:80/" class="camera-frame" alt="ESP32-CAM Stream">
             </div>
-            
+        
             <!-- Tombol untuk mengambil foto -->
             <div class="button-container flex gap-3 w-full">
                 <button id="capture-btn" class="capture-container flex gap-3 justify-center w-full text-white bg-dark-green p-5 rounded-lg">
-                    <h1>Ambil Foto Tanaman</h1>  
+                    <h1>Ambil Foto Tanaman</h1>
                 </button>
             </div>
-            
+        
             <!-- Container untuk hasil capture, deskripsi, dan prediksi -->
             <div id="result-container" class="w-full flex-col h-full hidden">
                 <div class="w-full flex gap-5 h-max">
                     <!-- Hasil Capture -->
                     <img id="photo-result" class="w-1/3 rounded-lg" alt="Hasil Foto Tanaman">
-                    
+        
                     <!-- Elemen untuk menampilkan deskripsi tanaman cabai -->
                     <div id="description-card" class="w-2/3 flex flex-col gap-3">
                         <h2 class="w-max text-xl font-bold text-dark-green">Deskripsi Tanaman</h2>
@@ -164,7 +164,7 @@
         
                 <!-- Elemen untuk menampilkan hasil prediksi dan rekomendasi perawatan -->
                 <div id="prediction-card" class="flex flex-col gap-3 w-full h-48 overflow-auto mt-5"></div>
-    
+        
                 <!-- Tombol untuk mengulang foto -->
                 <button id="retry-btn" class="retry-container mt-5 bg-gray-500 text-white p-5 rounded-lg hidden">
                     Ulangi Foto
@@ -174,72 +174,73 @@
         
     </div>
 
-    <script>
-        $(document).ready(function() {
-            const camera = document.getElementById('camera');
-            const captureBtn = document.getElementById('capture-btn');
-            const retryBtn = document.getElementById('retry-btn');
-            const predictionCard = document.getElementById('prediction-card');
-            const cameraContainer = document.getElementById('camera-container');
-            const resultContainer = document.getElementById('result-container');
-            const photoResult = document.getElementById('photo-result');
-            let videoStream;
-
-            // Fungsi untuk memulai kamera
-            async function startCamera() {
-                try {
-                    console.log('Memulai kamera...');
-                    videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
-                    camera.srcObject = videoStream;
-                    cameraContainer.classList.remove('hidden');  // Tampilkan kamera
-                    captureBtn.classList.remove('hidden');       // Tampilkan tombol capture
-                    resultContainer.classList.add('hidden');     // Sembunyikan hasil capture
-                    retryBtn.classList.add('hidden');            // Sembunyikan tombol ulangi
-                    console.log('Kamera berhasil dimulai');
-                } catch (error) {
-                    console.error('Gagal mengakses kamera:', error);
-                    alert('Gagal mengakses kamera: ' + error.message);
-                }
+    {{-- <script>
+            $(document).ready(function() {
+                const camera = document.getElementById('camera');
+                const captureBtn = document.getElementById('capture-btn');
+                const retryBtn = document.getElementById('retry-btn');
+                const predictionCard = document.getElementById('prediction-card');
+                const cameraContainer = document.getElementById('camera-container');
+                const resultContainer = document.getElementById('result-container');
+                const photoResult = document.getElementById('photo-result');
+                let videoStream;
+        
+                // Fungsi untuk memulai kamera
+                async function startCamera() {
+                    try {
+                        console.log('Memulai kamera...');
+                        videoStream = await navigator.mediaDevices.getUser Media({ video: true });
+                        camera.srcObject = videoStream;
+                        cameraContainer.classList.remove('hidden');  // Tampilkan kamera
+                        captureBtn.classList.remove('hidden');       // Tampilkan tombol capture
+                        resultContainer.classList.add('hidden');     // Sembunyikan hasil capture
+                        retryBtn.classList.add('hidden');            // Sembunyikan tombol ulangi
+                        console.log('Kamera berhasil dimulai');
+            } catch (error) {
+                console.error('Gagal mengakses kamera:', error);
+                alert('Gagal mengakses kamera: ' + error.message);
             }
-            // Memulai kamera saat halaman dimuat
-            startCamera(); 
+        }
 
-            // Fungsi untuk mengulang proses foto
-            retryBtn.addEventListener('click', () => {
-                startCamera();  // Mulai kamera kembali
-            });
+        // Memulai kamera saat halaman dimuat
+        startCamera();
 
-            // Fungsi untuk menangkap foto dari video dan mengirimkannya ke API
-            captureBtn.addEventListener('click', async () => {
-                console.log('Mengambil foto...');
-                const canvas = document.createElement('canvas');
-                canvas.width = camera.videoWidth;
-                canvas.height = camera.videoHeight;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
+        // Fungsi untuk mengulang proses foto
+        retryBtn.addEventListener('click', () => {
+            startCamera();  // Mulai kamera kembali
+        });
 
-                // Menampilkan gambar hasil tangkapan
-                const imageDataUrl = canvas.toDataURL('image/jpeg');
-                photoResult.src = imageDataUrl;
-                resultContainer.classList.remove('hidden');   // Menampilkan hasil capture
-                cameraContainer.classList.add('hidden');      // Menyembunyikan kamera
-                captureBtn.classList.add('hidden');           // Sembunyikan tombol "Ambil Foto Tanaman"
-                retryBtn.classList.remove('hidden');          // Tampilkan tombol "Ulangi Foto"
+        // Fungsi untuk menangkap foto dari video dan mengirimkannya ke API
+        captureBtn.addEventListener('click', async () => {
+            console.log('Mengambil foto...');
+            const canvas = document.createElement('canvas');
+            canvas.width = camera.videoWidth;
+            canvas.height = camera.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
 
-                // Matikan kamera setelah foto diambil
-                if (videoStream) {
-                    videoStream.getTracks().forEach(track => track.stop());
-                }
+            // Menampilkan gambar hasil tangkapan
+            const imageDataUrl = canvas.toDataURL('image/jpeg');
+            photoResult.src = imageDataUrl;
+            resultContainer.classList.remove('hidden');   // Menampilkan hasil capture
+            cameraContainer.classList.add('hidden');      // Menyembunyikan kamera
+            captureBtn.classList.add('hidden');           // Sembunyikan tombol "Ambil Foto Tanaman"
+            retryBtn.classList.remove('hidden');          // Tampilkan tombol "Ulangi Foto"
 
-                // Mengirim gambar ke API Flask
-                canvas.toBlob(async (blob) => {
-                    console.log('Mengirim gambar ke API...');
-                    const formData = new FormData();
-                    formData.append('image', blob, 'capture.jpg');
-                    
-                    // Pastikan URL yang benar
+            // Matikan kamera setelah foto diambil
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+            }
+
+            // Mengirim gambar ke API Flask
+            canvas.toBlob(async (blob) => {
+                console.log('Mengirim gambar ke API...');
+                const formData = new FormData();
+                formData.append('image', blob, 'capture.jpg');
+
+                // Pastikan URL yang benar
+                try {
                     const response = await fetch('http://127.0.0.1:5000/predict', { method: 'POST', body: formData });
-                    
                     const result = await response.json();
                     console.log('Hasil prediksi:', result);
 
@@ -261,7 +262,7 @@
                                 <p class="text-gray-700 mb-5">Kekurangan Nutrisi</p>
                                 <strong>-</strong>
                             </div>
-                            <div class="pyshical-con flex flex-col w-max text-center items-center justify-center -mt-3">
+                            <div class="physical-con flex flex-col w-max text-center items-center justify-center -mt-3">
                                 <p class="text-gray-700 mb-5">Kerusakan Fisik</p>
                                 <strong>Bercak Hitam</strong>
                             </div>
@@ -273,32 +274,34 @@
                                 <li><strong>Perawatan:</strong> ${result.rekomendasi.perawatan}</li>
                                 <li><strong>Perkiraan Waktu Panen:</strong> ${result.rekomendasi.perkiraan_waktu_panen}</li>
                                 <li><strong>Kerusakan Fisik:</strong> ${result.rekomendasi.kerusakan_fisik}</li>
-                                <li><strong>Kerusakan Fisik:</strong> ${result.rekomendasi.kerusakan_fisik}</li>
                             </ul>
                         </div>
                     `;
 
-                    // Menyimpan data gambar, kondisi kesehatan, dan rekomendasi ke database
-                    const saveFormData = new FormData();
-                    saveFormData.append('image', blob, 'capture.jpg');
-                    saveFormData.append('chili_condition', result.prediction);
-                    saveFormData.append('nutritional_detection', '-');
-                    saveFormData.append('physical_damage', 'Bercak Hitam');
-                    saveFormData.append('chili_disease', 'Busuk Buah');
-                    saveFormData.append('watering', result.rekomendasi.penyiraman);
-                    saveFormData.append('maintenance', result.rekomendasi.perawatan);
-                    saveFormData.append('harvest_time', result.rekomendasi.perkiraan_waktu_panen);
-                    saveFormData.append('pyshical_damage', result.rekomendasi.kerusakan_fisik);
+                        // Menyimpan data gambar, kondisi kesehatan, dan rekomendasi ke database
+                        const saveFormData = new FormData();
+                        saveFormData.append('image', blob, 'capture.jpg');
+                        saveFormData.append('chili_condition', result.prediction);
+                        saveFormData.append('nutritional_detection', '-');
+                        saveFormData.append('physical_damage', 'Bercak Hitam');
+                        saveFormData.append('chili_disease', 'Busuk Buah');
+                        saveFormData.append('watering', result.rekomendasi.penyiraman);
+                        saveFormData.append('maintenance', result.rekomendasi.perawatan);
+                        saveFormData.append('harvest_time', result.rekomendasi.perkiraan_waktu_panen);
+                        saveFormData.append('physical_damage', result.rekomendasi.kerusakan_fisik);
 
-                    const saveResponse = await fetch('http://127.0.0.1:8000/api/save-data', {
-                        method: 'POST',
-                        body: saveFormData
-                    });
+                        const saveResponse = await fetch('http://127.0.0.1:8000/api/save-data', {
+                            method: 'POST',
+                            body: saveFormData
+                        });
 
-                    if (saveResponse.ok) {
-                        console.log('Data berhasil disimpan ke database');
-                    } else {
-                        console.error('Gagal menyimpan data ke database');
+                        if (saveResponse.ok) {
+                            console.log('Data berhasil disimpan ke database');
+                        } else {
+                            console.error('Gagal menyimpan data ke database');
+                        }
+                    } catch (error) {
+                        console.error('Terjadi kesalahan saat mengirim data ke API:', error);
                     }
                 }, 'image/jpeg');
             });
@@ -312,44 +315,6 @@
                 }
             });
         });
-    </script>
-        {{-- <script>
-            // Alamat IP ESP32-CAM untuk stream video
-            const esp32CamUrl = "http://<ESP32_CAM_IP>/stream";
-            const video = document.getElementById("camera");
-            const captureBtn = document.getElementById("capture-btn");
-            const cancelBtn = document.getElementById("cancel-btn");
-            const cameraContainer = document.getElementById("camera-container");
-            const photoCard = document.getElementById("photo-card");
-            const photoCanvas = document.getElementById("photo");
-            const photoContext = photoCanvas.getContext("2d");
-        
-            // Menampilkan stream video dari ESP32-CAM
-            video.srcObject = null;
-            video.src = esp32CamUrl;
-            video.play();
-        
-            // Fungsi untuk mengambil foto dari stream video
-            captureBtn.addEventListener("click", () => {
-                photoCanvas.width = video.videoWidth;
-                photoCanvas.height = video.videoHeight;
-                photoContext.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-        
-                // Menampilkan hasil foto
-                photoCard.classList.remove("hidden");
-                cameraContainer.classList.add("hidden");
-                cancelBtn.classList.remove("hidden");
-                captureBtn.classList.add("hidden");
-            });
-        
-            // Fungsi untuk membatalkan dan kembali ke mode kamera
-            cancelBtn.addEventListener("click", () => {
-                cameraContainer.classList.remove("hidden");
-                photoCard.classList.add("hidden");
-                cancelBtn.classList.add("hidden");
-                captureBtn.classList.remove("hidden");
-            });
-        </script> --}}
+    </script> --}}
 </body>
 </html>
-

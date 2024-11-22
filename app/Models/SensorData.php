@@ -12,6 +12,6 @@ class SensorData extends Model
         'temperature',
         'humidity',
         'soil_moisture',
-        'esp_cam'
+        'image'
     ];
 }
