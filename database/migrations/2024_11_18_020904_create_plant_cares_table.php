@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('plant_cares', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sensor_data_id')->constrained('sensor_data')->onDelete('cascade');
+            $table->foreignId('sensor_data_id')->constrained('sensor_datas')->onDelete('cascade');
             $table->string('watering');
             $table->string('maintenance');
             $table->string('harvest_time');

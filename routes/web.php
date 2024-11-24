@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SensorDataController;
+use App\Http\Controllers\StreamingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('dashboard', DashboardController::class);
     Route::resource('ai', AiController::class);
     Route::resource('schedule', ScheduleController::class);
+    Route::get('/camera-stream', [SensorDataController::class, 'stream']);
+    // Route::post('/upload-photo', [SensorDataController::class, 'uploadPhoto'])->name('upload-photo');
 });
 
 Route::post('/logout', function () {

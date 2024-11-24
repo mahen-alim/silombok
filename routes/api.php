@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CameraController;
 use App\Http\Controllers\ChiliHealthController;
 use App\Http\Controllers\SensorDataController;
+use App\Http\Controllers\StreamingController;
 use App\Models\SensorData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -25,6 +27,18 @@ Route::post('/sensor-data', [SensorDataController::class, 'store']);
 Route::post('/save-data-upload', [SensorDataController::class, 'upload']);
 Route::get('/sensor-data', [SensorDataController::class, 'index']);
 Route::post('/save-data', [ChiliHealthController::class, 'store']);
+// Mendefinisikan route untuk streaming video
+Route::get('/get-frame', [SensorDataController::class, 'getFrame']);
+
+// Mendefinisikan route untuk mengambil foto
+Route::post('/save-data-upload', [SensorDataController::class, 'saveDataUpload']);
+
+// Mendefinisikan route untuk mengunggah foto
+Route::post('/upload-frame', [SensorDataController::class, 'uploadFrame']);
+Route::get('/get-frame', [CameraController::class, 'getFrame']);
+Route::get('/photos', function () {
+    return SensorData::latest()->get(); // Mengambil foto terbaru dari database
+});
 
 Route::post('/api/sensor-data', function (Request $request) {
     $request->validate([
