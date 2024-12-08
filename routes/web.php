@@ -21,6 +21,8 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 Route::resource('dashboard', DashboardController::class);
 Route::resource('ai', AiController::class);
 Route::resource('schedule', ScheduleController::class);
+Route::put('/schedule/{id}', [ScheduleController::class, 'update'])->name('schedule.update');
+
 
 Route::post('/logout', function () {
     Auth::logout();

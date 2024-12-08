@@ -96,128 +96,133 @@
                     </form>
                     
                     <!-- Tabel Jadwal Penyiraman -->
-                    <section class="mt-6">
-                        <h3 class="text-lg font-semibold text-dark-green">Jadwal Penyiraman Terjadwal</h3>
-                        <div class="overflow-x-auto mt-4 rounded-lg">
-                            <table class="min-w-full text-left text-sm">
-                                <thead>
-                                    <tr class="bg-dark-green text-white">
-                                        <th class="py-3 px-4">No.</th>
-                                        <th class="py-3 px-4">Hari</th>
-                                        <th class="py-3 px-4">Waktu</th>
-                                        <th class="py-3 px-4">Durasi (Menit)</th>
-                                        <th class="py-3 px-4">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($schedules as $index => $schedule)
-                                        <tr class="bg-white" data-schedule-id="{{ $schedule->id }}" data-schedule-days="{{ implode(', ', json_decode($schedule->days)) }}" data-schedule-time="{{ $schedule->time }}" data-schedule-duration="{{ $schedule->duration }}">
-                                            <td class="py-3 px-4">{{ $index + 1 }}</td>
-                                            <td class="py-3 px-4">{{ implode(', ', json_decode($schedule->days)) }}</td>
-                                            <td class="py-3 px-4">{{ $schedule->time }}</td>
-                                            <td class="py-3 px-4">{{ $schedule->duration }} Menit</td>
-                                            <td class="py-3 px-4 space-x-2">
-                                                <button class="bg-yellow-500 text-white px-4 py-1 rounded-lg hover:bg-yellow-600" id="btn-edit">Edit</button>
-                                                <!-- Tombol Hapus dengan SweetAlert2 -->
-                                                <form id="delete-form-{{ $schedule->id }}" action="{{ route('schedule.destroy', $schedule->id) }}" method="POST" style="display: none;">
-                                                    @csrf
-                                                    @method('delete')
-                                                </form>
-
-                                                <button class="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600" onclick="confirmDelete({{ $schedule->id }})">
-                                                    Hapus
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                </div>
-            </main>
-        </div>
-
-        <!-- Modal Edit -->
-        <div id="modal-edit" class="fixed bg-gray-600 bg-opacity-50 inset-0 z-50 hidden overflow-y-auto">
-            <div class="flex items-center justify-center min-h-screen px-4 text-center">
-                <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all w-full max-w-lg">
-                    <!-- Form Edit -->
-                    <form class="space-y-4 p-6" id="form-edit" method="POST" action="">
-                        @csrf
-                        @method('PUT')
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-green-900" for="days">Pilih Hari</label>
-                            <div id="days-container" class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
-                                @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $day)
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-green-500" name="days[]" value="{{ $day }}">
-                                        <span class="ml-2 text-sm">{{ $day }}</span>
-                                    </label>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-green-900" for="time">Pilih Waktu Penyiraman</label>
-                            <input type="time" id="time-edit" name="time" class="mt-2 block w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-green-500" required>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-green-900" for="duration">Durasi Penyiraman (menit)</label>
-                            <input type="number" id="duration-edit" name="duration" min="1" max="60" class="mt-2 block w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-green-500" placeholder="Masukkan durasi (misal: 10)" required>
-                        </div>
-
-                        <div class="flex justify-end space-x-2">
-                            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700" id="btn-cancel">Batalkan</button>
-                            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Perbarui Jadwal</button>
-                        </div>
-                    </form>
-                </div>
+<section class="mt-6">
+    <h3 class="text-lg font-semibold text-dark-green">Jadwal Penyiraman Terjadwal</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+        @foreach ($schedules as $index => $schedule)
+        <div class="bg-white shadow-md rounded-lg p-4 space-y-3" data-schedule-id="{{ $schedule->id }}">
+            <!-- Nomor -->
+            <div class="flex justify-between items-center">
+                <h4 class="text-dark-green font-bold">Jadwal #{{ $index + 1 }}</h4>
+                <span class="text-sm text-gray-500">Durasi: {{ $schedule->duration }} Menit</span>
+            </div>
+            <!-- Hari -->
+            <div>
+                <p class="text-sm font-medium text-green-900">Hari:</p>
+                <p>{{ implode(', ', json_decode($schedule->days)) }}</p>
+            </div>
+            <!-- Waktu -->
+            <div>
+                <p class="text-sm font-medium text-green-900">Waktu:</p>
+                <p>{{ $schedule->time }}</p>
+            </div>
+            <!-- Aksi -->
+            <div class="flex space-x-2">
+                <!-- Tombol Edit -->
+                <button 
+                    class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 w-full"
+                    onclick="openEditModal({{ $schedule->id }}, '{{ implode(', ', json_decode($schedule->days)) }}', '{{ $schedule->time }}', {{ $schedule->duration }})"
+                >
+                    Edit
+                </button>
+                <!-- Tombol Hapus -->
+                <form id="delete-form-{{ $schedule->id }}" action="{{ route('schedule.destroy', $schedule->id) }}" method="POST" style="display: none;">
+                    @csrf
+                    @method('delete')
+                </form>
+                <button 
+                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 w-full"
+                    onclick="confirmDelete({{ $schedule->id }})"
+                >
+                    Hapus
+                </button>
             </div>
         </div>
+        @endforeach
     </div>
+</section>
 
-    <!-- Script for Modal -->
-    <script>
-        // Ambil semua tombol edit
-        document.querySelectorAll('#btn-edit').forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.preventDefault();
-                
-                // Ambil jadwal yang dipilih dari tombol
-                const scheduleRow = this.closest('tr');
-                const scheduleId = scheduleRow.getAttribute('data-schedule-id');
-                const days = scheduleRow.getAttribute('data-schedule-days').split(', ');
-                const time = scheduleRow.getAttribute('data-schedule-time');
-                const duration = scheduleRow.getAttribute('data-schedule-duration');
+<!-- Modal Edit -->
+<div id="modal-edit" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h3 class="text-lg font-semibold text-dark-green mb-4">Edit Jadwal Penyiraman</h3>
+        <form id="form-edit" action="#" method="POST">
+            @csrf
+            @method('PUT')
+            <!-- Hari -->
+            <div id="days-container" class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">Hari</label>
+                <div class="flex flex-wrap gap-2 mt-2">
+                    @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $day)
+                    <label class="flex items-center">
+                        <input type="checkbox" name="days[]" value="{{ $day }}" class="mr-2">
+                        {{ $day }}
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+            <!-- Waktu -->
+            <div class="mb-4">
+                <label for="time-edit" class="block text-sm font-medium text-gray-700">Waktu</label>
+                <input type="time" id="time-edit" name="time" class="block w-full mt-1 p-2 border rounded-md">
+            </div>
+            <!-- Durasi -->
+            <div class="mb-4">
+                <label for="duration-edit" class="block text-sm font-medium text-gray-700">Durasi (Menit)</label>
+                <input type="number" id="duration-edit" name="duration" class="block w-full mt-1 p-2 border rounded-md" min="1">
+            </div>
+            <!-- Aksi -->
+            <div class="flex justify-end space-x-2">
+                <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600" onclick="closeEditModal()">Batal</button>
+                <button type="submit" class="bg-dark-green text-white px-4 py-2 rounded-lg hover:bg-green-800">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-                // Isi form di modal dengan data jadwal yang dipilih
-                document.querySelector('#form-edit').action = `/schedule/${scheduleId}`; // Ganti action URL form
-                document.querySelector('#time-edit').value = time;
-                document.querySelector('#duration-edit').value = duration;
-
-                // Set checkbox untuk hari yang dipilih
-                document.querySelectorAll('#days-container input[type="checkbox"]').forEach(checkbox => {
-                    if (days.includes(checkbox.value)) {
-                        checkbox.checked = true;
-                    } else {
-                        checkbox.checked = false;
-                    }
-                });
-
-                // Tampilkan modal
-                document.querySelector('#modal-edit').classList.remove('hidden');
-            });
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Anda tidak akan bisa mengembalikan data ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
         });
+    }
 
-        // Fungsi untuk menutup modal ketika tombol "Batalkan" ditekan
-        document.querySelector('#btn-cancel').addEventListener('click', function () {
-            document.querySelector('#modal-edit').classList.add('hidden');
-        });
+function openEditModal(id, days, time, duration) {
+    // Split days from string into array
+    const selectedDays = days.split(', ');
 
-    </script>
+    // Set the form action to the edit route
+    document.querySelector('#form-edit').action = `/schedule/${id}`;
+
+    // Set the form values for time and duration
+    document.querySelector('#time-edit').value = time;
+    document.querySelector('#duration-edit').value = duration;
+
+    // Set the checkboxes for the selected days
+    document.querySelectorAll('#days-container input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = selectedDays.includes(checkbox.value);
+    });
+
+    // Show the modal
+    document.querySelector('#modal-edit').classList.remove('hidden');
+}
+
+function closeEditModal() {
+    document.querySelector('#modal-edit').classList.add('hidden');
+}
+
+</script>
 
     
     @if (session('scheduleAlert'))
