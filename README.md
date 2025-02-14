@@ -59,7 +59,7 @@ Website ini hanya memilki 1 jenis pengguna, yaitu:
 8. Akses aplikasi melalui browser di `http://localhost:8000` atau alamat IP laptop masing-masing.
     
 9. Akses dan panduan penggunaan backend server untuk menjalankan model latih dapat diakses pada link berikut :
-   ## https://github.com/mahen-alim/silombok-backend
+   https://github.com/mahen-alim/silombok-backend
 
 ## Teknologi yang Digunakan
 
@@ -82,7 +82,7 @@ Jika Anda ingin berkontribusi dalam pengembangan proyek ini, silakan lakukan **f
 ## Kontak
 
 Jika Anda memiliki pertanyaan lebih lanjut, silakan hubungi kami di:  
-Email: mahennekkers27@gmail.com
-No. WA: 0895807400305
+- Email: mahennekkers27@gmail.com
+- No. WA: 0895807400305
 
 ---
